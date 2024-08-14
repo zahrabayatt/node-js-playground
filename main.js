@@ -1,7 +1,0 @@
-// The node applications are highly-scalable and this is because of the none-blocking or asynchronous of node.
-
-// Node application are asynchronous by default.
-
-// In node we have a single thread to handle all requests. when a request arrives that single thread is used to handle that request if we need to query a database, our thread doesn't have to wait for the database to return the data while the database is executing our query that thread will be used to serve another client. when the database prepares the result it puts a message what we call an event Queue. Node is continuously monitoring this queue in the background. when it finds an event in this queue it will take it out and process it. this kind of architecture makes Node ideal for building applications that include a lot of disk or network access. we can serve more client without the need to throw in more hardware and that's why node applications are highly scalable.
-
-// In contrast node should not be used for CPU intensive applications like a video encoding or an image manipulation service. in this kind of applications we have a lot of calculations that should be done by CPU and few operations that touch the file system or the network. since node applications are single threaded when performing the calculations to one client other clients have to wait and that's why node should not be used in CPU intensive applications. it should only be used for building data-intensive and real-time applications.
