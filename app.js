@@ -1,29 +1,19 @@
-console.log(); // console is a global object so it's a part of global scope which means we can access it anywhere in any files.
+// In the client-side of JS that we run inside of browsers when we declare a variable or a function that is added to the global scope for example:
 
-// we have a bunch of other objects and functions that are also globally available in node for example:
+// var sayHello = function () {};
 
-setTimeout(() => {}, timeout); // we use this to call a function after a given delay.
-setInterval(() => {}, interval); // we use to repeatedly call a function after a given delay.
-clearInterval(); // we use to stop that function from being called repeatedly
+// window.sayHello();
 
-// So these are the global objects in JS and these are just the part of standard JS, we can use them on the client or inside of a node.
+// There is a problem with this behavior! in a real world application we often split our JS code into multiple files so it is possible that we have two files and in both these files we define this function,sayHello, with the exact same name and because this function added to the global scopes when we define this function in another file that new definition is going to overwrite the previous definition. this is the problem with the global scope so in order to build reliable and maintainable applications, we should avoid defining variables and functions in the global scope instead we need modularity! we need to create small building blocks or modules where we define our variables and functions.
 
-// In browsers we have this window object that represents our global scope so all the variables and functions that defined globally, we can access them via this window:
+// at the core of node we have this concept called module. every file in the node application is considered a module. the variables and functions that define in that file or that module are scoped to that module.
 
-window.console.log();
-window.setTimeout();
-window.setInterval();
-window.clearInterval();
+// in object - oriented programming say we say they are private, they are not available outside of that container.
 
-var message = "";
-console.log(window.message); // this variable that declare globally also available in window object.
+// if you want to use a variable or function defined in a the module, you need to explicitly export it and make it public.
 
-// but in node we don't have this window object! instead we have another object that we called global:
+// every node application has at least one file or module that we call a min module.
 
-global.console.log();
-global.setTimeout();
-global.setInterval();
-global.clearInterval();
+console.log(module); // module is not a global object!
 
-var message = "";
-console.log(global.message); // undefined - this variable is not added to the global object! these variable only scoped to this file(app.js) so they are not available outside of this file. this is because of node modular system.
+// module object is a json object with key-value pairs.
