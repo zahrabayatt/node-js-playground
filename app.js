@@ -1,16 +1,37 @@
 // Built-in modules and global objects in node js: https://nodejs.org/docs/latest/api/
 
-// OS module docs: https://nodejs.org/docs/latest/api/os.html
-
 // this file is a Common Js module!
 
-const os = require("node:os");
+// FileSystem module docs: https://nodejs.org/docs/latest/api/fs.html
 
-const totalMemory = os.totalmem(); // Returns the amount of free system memory in bytes as an integer.
+const fs = require("node:fs");
 
-const freeMemory = os.freemem(); // Returns the total amount of system memory in bytes as an integer.
+// all method comes with pair asyncrouchouse and syncrochounce:
 
-console.log(`Total Memory: ${totalMemory}`);
-console.log(`Free Memory: ${freeMemory}`);
+//fs.access(); // syncrochounce method, avoid to use it, it is blocking!
+//fs.accessSync(); // asynchrounce method, recommended to use!
 
-// Before Node we couldn't get this kind of information about OS because JS only work inside of browsers and worked with object like window or document.
+const files = fs.readdirSync("./"); // Reads the contents of the directory.
+console.log(files);
+// output:
+// [
+//   '.git',
+//   '.gitignore',
+//   '.vscode',
+//   'app.js',
+//   'img',
+//   'LICENSE',
+//   'node_modules',
+//   'package-lock.json',
+//   'package.json'
+// ]
+
+// all these asynchrounce function take a callback function and run it when operation completes.
+fs.readdir("./", (err, files) => {
+  if (err) {
+    console.log("Error", err);
+    return;
+  }
+
+  console.log("Result", files);
+});
