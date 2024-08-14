@@ -5,6 +5,4 @@ function log(message) {
   console.log(message);
 }
 
-// export the function and variable
-module.exports.log = log;
-// module.exports.url = url; // this variable is implementation details and we don't need to export that!
+module.exports = log;
