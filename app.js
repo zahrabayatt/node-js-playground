@@ -2,36 +2,28 @@
 
 // this file is a Common Js module!
 
-// FileSystem module docs: https://nodejs.org/docs/latest/api/fs.html
+// Events module docs: https://nodejs.org/docs/latest/api/events.html
 
-const fs = require("node:fs");
+// Event is signal that indicates that something has happened in our application.
 
-// all method comes with pair asyncrouchouse and syncrochounce:
+// emit means make a noise or produce something!
 
-//fs.access(); // syncrochounce method, avoid to use it, it is blocking!
-//fs.accessSync(); // asynchrounce method, recommended to use!
+const EventEmitter = require("node:events"); // the naming is uppercase because it's a class not function or simple variable!
 
-const files = fs.readdirSync("./"); // Reads the contents of the directory.
-console.log(files);
-// output:
-// [
-//   '.git',
-//   '.gitignore',
-//   '.vscode',
-//   'app.js',
-//   'img',
-//   'LICENSE',
-//   'node_modules',
-//   'package-lock.json',
-//   'package.json'
-// ]
+// class is a container for a bunch of related methods and properties.
 
-// all these asynchrounce function take a callback function and run it when operation completes.
-fs.readdir("./", (err, files) => {
-  if (err) {
-    console.log("Error", err);
-    return;
-  }
+const emitter = new EventEmitter(); // emitter is a object.
 
-  console.log("Result", files);
+// Register a Listener
+emitter.on("messageLogged", () => {
+  console.log("Listener called");
 });
+// or you can use addListener for register event
+emitter.addListener("messageLogged", () => {
+  console.log("Listener called");
+});
+
+// Raise a Event
+emitter.emit("messageLogged"); // we use emit to raise a event.
+
+// order is matter! you should first register a event and then raise it!
