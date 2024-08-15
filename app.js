@@ -1,21 +1,20 @@
-// Built-in modules and global objects in node js: https://nodejs.org/docs/latest/api/
-
-// this file is a Common Js module!
-
-// HTTP module docs: https://nodejs.org/docs/latest/api/http.html
-
-// we use HTTP module for creating networking applications. for example we can create a web server that listens for HTTP requests on a given port.
-
-// with this module we can easily create a back-end service for our client applications like a web applications that we build with react or angular or mobile application running on a mobile device.
+// in real world example we don't respond to the connection event to build an Http service! instead we do this:
 
 const http = require("node:http");
 
-const server = http.createServer(); // create a web server
-// this server is an event emitter so it has all the capabilities of event emitter. like we have a on method or addListener method,..
-server.listen(3000);
+const server = http.createServer((req, res) => {
+  // in real world we don't use http module for building backend service because as you can see here as we add more routes here this code gets more complex! instead we use framework like Express(it's top of the Http Module with Node.js),...
+  if (req.url === "/") {
+    res.write("Hello World");
+    res.end();
+  }
 
-server.on("connection", (socket) => {
-  console.log("New connection.");
+  if (req.url === "/api/courses") {
+    res.write(JSON.stringify([1, 2, 3]));
+    res.end();
+  }
 });
+
+server.listen(3000);
 
 console.log("Listening on port 3000...");
