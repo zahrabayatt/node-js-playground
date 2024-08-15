@@ -1,20 +1,5 @@
-// in real world example we don't respond to the connection event to build an Http service! instead we do this:
+// NPM or node package manager is a command line tool as well as a registry of third party library that we can to our node application. so pretty much for any kind of functionality there is a free and open-source npm module in npm registry that we can add tor our node application.
 
-const http = require("node:http");
+// if you have a ideo for a node module or functionality that you want to share with others, you can create your own node module and publish it in npm. and others can add this module via a command line call npm to their node application.
 
-const server = http.createServer((req, res) => {
-  // in real world we don't use http module for building backend service because as you can see here as we add more routes here this code gets more complex! instead we use framework like Express(it's top of the Http Module with Node.js),...
-  if (req.url === "/") {
-    res.write("Hello World");
-    res.end();
-  }
-
-  if (req.url === "/api/courses") {
-    res.write(JSON.stringify([1, 2, 3]));
-    res.end();
-  }
-});
-
-server.listen(3000);
-
-console.log("Listening on port 3000...");
+// https://www.npmjs.com/
