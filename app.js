@@ -14,16 +14,10 @@ const EventEmitter = require("node:events"); // the naming is uppercase because 
 
 const emitter = new EventEmitter(); // emitter is a object.
 
-// Register a Listener
-emitter.on("messageLogged", () => {
-  console.log("Listener called");
-});
-// or you can use addListener for register event
-emitter.addListener("messageLogged", () => {
-  console.log("Listener called");
+// Register a Listener - receive event argument
+emitter.on("messageLogged", (arg) => {
+  console.log("Listener called", arg);
 });
 
-// Raise a Event
-emitter.emit("messageLogged"); // we use emit to raise a event.
-
-// order is matter! you should first register a event and then raise it!
+// Raise a Event with event argument
+emitter.emit("messageLogged", { id: 1, url: "http://" });
