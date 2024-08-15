@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/zahrabayatt/node-js-playground/issues"
   },
-  "homepage": "https://github.com/zahrabayatt/node-js-playground#readme"
+  "homepage": "https://github.com/zahrabayatt/node-js-playground#readme",
+  "dependencies": {
+    "underscore": "^1.13.7"
+  }
 }

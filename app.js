@@ -1,6 +1,10 @@
-// package.json is basically is a json file with basic information (meta data) about your application and all node application by standard has this package.json file.
+// install underscore node package:
+// https://www.npmjs.com/package/underscore
 
-// to create package.json, run this command:
-// npm init
+// command for installing node package:
+// npm install [packageName]
 // or
-// npm init - y
+// npm i [packageName]
+
+// in older venison npm you must applied --save flag, something like this:
+// npm i underscore --save
