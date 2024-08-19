@@ -1,11 +1,1 @@
-const _ = require("underscore"); // this module exist in node_modules folder
-
-// base on require argument the node module could be:
-// - Core module (like 'http')
-// - File or folder (like './logger')
-// - node_modules (like 'underscore')
-
-// underscore package docs:https://underscorejs.org/
-
-var result = _.contains([1, 2, 3], 3);
-console.log(result);
+// all dependencies of our application as well as their dependencies are stored under the node_modules folder but there is a exception here, if one of the packages uses different version of one of the application dependencies then this dependency install locally in the package.
