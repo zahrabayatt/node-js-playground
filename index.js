@@ -1,1 +1,1 @@
-// all dependencies of our application as well as their dependencies are stored under the node_modules folder but there is a exception here, if one of the packages uses different version of one of the application dependencies then this dependency install locally in the package.
+// you should exclude your node_modules from your source control and with package.json and with npm install or npm i every one in the team can restored dependencies of applications in their machine from npm dependency.
