@@ -1,18 +1,5 @@
-// example: ^4.13.6
+// To check what version of dependency is installed, you can check package.json for the package in the node_modules folder or you can run this command to see list of all dependencies with exact version:
 
-// in SemVer (semantic versioning), the version of the node package has three component, three number: Major.Minor.Patch
+// npm list or npm list--depth=0 : this command show only application's dependencies
 
-// Major: it's for bug fixes
-// Minor: it's for new features that don't break the existing API
-// Major: it's for new features that break break the existing API
-
-// old version : 4.13.6
-// new version with bug fixes: 4.13.7
-// new version with minor changes: 4.14.0
-// new version with major changes: 5.0.0
-
-// the ^ is the Caret character and tell npm that we are interested in this package with major version 4 and if there is new minor or patch version, we interested in that package as well
-
-// alternative syntax for ^4.13.6 is 4.x
-// alternative syntax for ~4.13.6 is 4.13.x
-// 4.13.6 means exact version
+// npm list--depth=1 : this command show application's dependencies and dependencies of each of those applications
