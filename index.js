@@ -1,6 +1,5 @@
-// To install or downgrade or upgrade the specific version of a package add version at end of the npm i:
-// npm i[package name]@x.y.z
+// To update version of a published node package you con run this command:
+// npm version minor (update minor version)
 
-// example:
-// npm i underscore @1.4.0
-// npm i underscore@latest
+// To publish of a node package, you can run this command:
+// npm publish
