@@ -19,6 +19,6 @@
   "homepage": "https://github.com/zahrabayatt/node-js-playground#readme",
   "dependencies": {
     "mongoose": "^8.5.3",
-    "underscore": "^1.13.7"
+    "underscore": "^1.4.0"
   }
 }

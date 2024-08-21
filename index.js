@@ -1,6 +1,6 @@
-// to check dependencies of a npm package you can check the Dependencies section in npmjs.com about that package or you can run these command:
+// To install or downgrade or upgrade the specific version of a package add version at end of the npm i:
+// npm i[package name]@x.y.z
 
-// npm view [package name] - see package.json of npm package
-// npm view [package name] dependencies - see only dependencies of npm package
-
-// npm view [package name] versions - see all versions of npm package
+// example:
+// npm i underscore @1.4.0
+// npm i underscore@latest
