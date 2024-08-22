@@ -1,0 +1,24 @@
+{
+  "name": "js-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zahrabayatt/node-js-playground.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zahrabayatt/node-js-playground/issues"
+  },
+  "homepage": "https://github.com/zahrabayatt/node-js-playground#readme",
+  "dependencies": {
+    "mongoose": "^8.5.3",
+    "underscore": "^1.13.7"
+  }
+}
