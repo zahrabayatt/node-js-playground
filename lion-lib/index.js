@@ -1,11 +1,13 @@
 module.exports.add = (a, b) => a + b;
+module.exports.multiply = (a, b) => a * b;
 
-// create a account in npmjs: npm adduser
-// to login into your account in npmjs : npm login
-// To test that you have successfully logged in: npm whoami
+// to update a published package we can manually update the version in package.json and run npm publish
+// Or run this command:
+// npm version major --> if it's a major update
+// npm version minor --> if it's a minor update
+// npm version patch --> if it's a patch update
 
-// after you login you can publish your package with this command: npm publish
+// in this example it is a minor update
 
-// the name of package should be uniq!
-
-// now we can install this package with: npm i lion-lib-203947 in another application like node-app
+// after that we can publish the updated package:
+// npm publish
