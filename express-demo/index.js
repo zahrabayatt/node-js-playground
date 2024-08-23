@@ -1,20 +1,10 @@
-// express js doc: https://expressjs.com/en/4x/api.html
-
 const express = require("express");
 
-const app = express(); // by convention we called the return object of express method as app and this represent our app.
+const app = express();
 
-// this app object has a bunch of useful methods:
-// app.get();
-// app.post();
-// app.put();
-// app.delete();
-// all these methods corresponds to HTTP methods or verbs.
-
-// example:
 app.get("/", (req, res) => {
   res.send("Hello World");
-}); // we send a route url and a route handler
+});
 
 app.get("/api/courses", (req, res) => {
   res.send([1, 2, 3]);
@@ -22,4 +12,7 @@ app.get("/api/courses", (req, res) => {
 
 app.listen(3000, () => console.log("Listening on port 3000..."));
 
-// in this implementation we don't have those if blocks and we define routs with these app methods like get and as our applications grows we can move some of these routs in another file so express makes our code structure.
+// every time we make a change to this code we have to go back to terminal and  stop this process (node index.js) and start it again. this is very tedious. the better way is use a node package called nodemon which is short for node monitor.
+// npm i -g nodemon -> install nodemon package globally
+// then instead of running your application with node use nodemon: nodemon index.js
+// if we change something in our code, nodemon automatically restart our application.
