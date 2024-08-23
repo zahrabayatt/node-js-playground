@@ -23,23 +23,17 @@ app.get("/api/courses/:id", (req, res) => {
   const course = courses.find((c) => c.id === parseInt(req.params.id));
   if (!course) {
     res.status(404).send("The course with the given ID was not found!");
+    return;
   }
 
   res.send(course);
 });
 
 app.post("/api/courses", (req, res) => {
-  // You can valuate data via writing logic like this:
-  // if (!req.body.name || req.body.name.length < 3) {
-  //   res
-  //     .status(400)
-  //     .send("Name is required and should be minimum 3 characters.");
-  // }
-  // Or for data validation you can use node package called joi : https://www.npmjs.com/package/joi
-
   const { error } = validateCourse(req.body);
   if (error) {
     res.status(400).send(error.message);
+    return;
   }
 
   const course = {
@@ -54,11 +48,13 @@ app.put("/api/courses/:id", (req, res) => {
   const course = courses.find((c) => c.id === parseInt(req.params.id));
   if (!course) {
     res.status(404).send("The course with the given ID was not found!");
+    return;
   }
 
   const { error } = validateCourse(req.body);
   if (error) {
     res.status(400).send(error.message);
+    return;
   }
 
   course.name = req.body.name;
@@ -72,6 +68,19 @@ function validateCourse(course) {
 
   return schema.validate(course);
 }
+
+app.delete("/api/courses/:id", (req, res) => {
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course) {
+    res.status(404).send("The course with the given ID was not found!");
+    return;
+  }
+
+  const courseIndex = courses.indexOf(course);
+  courses.splice(courseIndex, 1);
+
+  res.send(course);
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
