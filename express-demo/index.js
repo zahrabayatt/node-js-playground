@@ -1,3 +1,4 @@
+const Joi = require("joi"); // it return a class, so the first character of module's name should be Capital
 const express = require("express");
 const app = express();
 
@@ -29,6 +30,21 @@ app.get("/api/courses/:id", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
+  // You can valuate data via writing logic like this:
+  // if (!req.body.name || req.body.name.length < 3) {
+  //   res
+  //     .status(400)
+  //     .send("Name is required and should be minimum 3 characters.");
+  // }
+  // Or for data validation you can use node package called joi : https://www.npmjs.com/package/joi
+  const schema = Joi.object({
+    name: Joi.string().alphanum().min(3).required(),
+  });
+  const result = schema.validate(req.body);
+  if (result.error) {
+    res.status(400).send(result.error.message);
+  }
+
   const course = {
     id: courses.length + 1,
     name: req.body.name,
