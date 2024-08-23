@@ -10,9 +10,19 @@ app.get("/api/courses", (req, res) => {
   res.send([1, 2, 3]);
 });
 
-app.listen(3000, () => console.log("Listening on port 3000..."));
+// Read PORT from environment variables
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
 
-// every time we make a change to this code we have to go back to terminal and  stop this process (node index.js) and start it again. this is very tedious. the better way is use a node package called nodemon which is short for node monitor.
-// npm i -g nodemon -> install nodemon package globally
-// then instead of running your application with node use nodemon: nodemon index.js
-// if we change something in our code, nodemon automatically restart our application.
+// Define a environment variable in Powershell:
+// $env:PORT=5000
+// Check the value of environment variable in Powershell:
+// $env:PORT
+
+// Define a environment variable in cmd:
+// set PORT=5000
+// Check the value of environment variable in cmd:
+// set PORT
+
+// the both way is temporary and exist until you close terminal.
+// to define a permeate environment variable in windows machine check this link: https://stackoverflow.com/questions/5898131/set-a-persistent-environment-variable-from-cmd-exe
