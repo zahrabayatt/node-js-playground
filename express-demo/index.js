@@ -4,23 +4,14 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
-// It is better to define our middleware function in sprats files
+app.use(express.urlencoded({ extended: true })); // it parses incoming requests with url encoded payload and populate req.body
+
+// use postman and send a post http request and send body with x-www-from-urlencoded
+
+app.use(express.static("public")); // we use that to serve static files, the argument is the name of folder
+// now see this: http://localhost:3000/readme.txt
+
 app.use(logger);
-
-// we call app.use to install a middleware function in our request processing pipeline.
-// next refer to next middleware in pipeline
-app.use((req, res, next) => {
-  console.log("Logging...");
-  next(); // To pass control to next middleware in pipeline
-  // if we don't pass to next middleware or do not determine response, it makes request hang and stuck.
-});
-
-app.use((req, res, next) => {
-  console.log("Authentication...");
-  next();
-});
-
-// our middleware functions call in sequence!
 
 const courses = [
   { id: 1, name: "course1" },
