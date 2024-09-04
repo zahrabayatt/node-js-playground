@@ -5,23 +5,28 @@ const logger = require("./logger");
 const express = require("express");
 const app = express();
 
-// express js built-in and Third-party middleware: https://expressjs.com/en/resources/middleware.html
+// In more complex and enterprize application, you need know what environment, your code running on, like dev, stage, prod. you might to enable or disable certain features base on the current environment.
 
-// If you don't need middleware functionality, don't use it because every middleware function will impact on performance of your application and make slow down your request processing.
+// How to get current environment?
 
-// helmet middleware: It Helps secure your apps by setting various HTTP headers.
-// helmet docs:
-// https://github.com/helmetjs/helmet
-// https://www.npmjs.com/package/helmet
+// 1- process is a global object in Node that gives us access to current object and it has a property called env that gives us environment variables, we have a standard env variable called NODE_ENV and it returns the environment for this application and if not set it returns undefined
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 
-// morgan middleware: HTTP request logger.
-// morgan doc: https://expressjs.com/id/resources/middleware/morgan.html
+// 2- app object has a method called get that we used to get various setting about application that one of the setting is env, and the default value is devilment.
+console.log(`app: ${app.get("env")}`);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(helmet());
-app.use(morgan("tiny")); // you can specify the format like tiny,...
+
+if (app.get("env") === "development") {
+  app.use(morgan("tiny"));
+  console.log("Morgan is enabled...");
+}
+
+// we set env for our application using this command:
+// set NODE_ENV=production - only works in cmd not in powershell
 
 app.use(logger);
 
