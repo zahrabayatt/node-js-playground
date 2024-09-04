@@ -1,15 +1,27 @@
+const helmet = require("helmet");
+const morgan = require("morgan");
 const Joi = require("joi");
 const logger = require("./logger");
 const express = require("express");
 const app = express();
 
+// express js built-in and Third-party middleware: https://expressjs.com/en/resources/middleware.html
+
+// If you don't need middleware functionality, don't use it because every middleware function will impact on performance of your application and make slow down your request processing.
+
+// helmet middleware: It Helps secure your apps by setting various HTTP headers.
+// helmet docs:
+// https://github.com/helmetjs/helmet
+// https://www.npmjs.com/package/helmet
+
+// morgan middleware: HTTP request logger.
+// morgan doc: https://expressjs.com/id/resources/middleware/morgan.html
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // it parses incoming requests with url encoded payload and populate req.body
-
-// use postman and send a post http request and send body with x-www-from-urlencoded
-
-app.use(express.static("public")); // we use that to serve static files, the argument is the name of folder
-// now see this: http://localhost:3000/readme.txt
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.use(helmet());
+app.use(morgan("tiny")); // you can specify the format like tiny,...
 
 app.use(logger);
 
