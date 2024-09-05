@@ -1,3 +1,4 @@
+const config = require("config");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const Joi = require("joi");
@@ -5,28 +6,31 @@ const logger = require("./logger");
 const express = require("express");
 const app = express();
 
-// In more complex and enterprize application, you need know what environment, your code running on, like dev, stage, prod. you might to enable or disable certain features base on the current environment.
-
-// How to get current environment?
-
-// 1- process is a global object in Node that gives us access to current object and it has a property called env that gives us environment variables, we have a standard env variable called NODE_ENV and it returns the environment for this application and if not set it returns undefined
-console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
-
-// 2- app object has a method called get that we used to get various setting about application that one of the setting is env, and the default value is devilment.
-console.log(`app: ${app.get("env")}`);
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(helmet());
 
+// Configuration
+console.log("Application Name: " + config.get("name"));
+console.log("Mail Server: " + config.get("mail.host"));
+
+// for testing, in cmd run these commands:
+// set NODE_DEV=development
+// nodemon index.js
+
+// if you want to change the NODE_DEV, you should close and open cmd and then run set command!
+
+console.log("Mail Password: " + config.get("mail.password"));
+
+// for testing, create a file with exact spelling, custom-environment-variables.json for mapping config to environment variables and then set environment variable and run application:
+// set app_password=1234
+// nodemon index.js
+
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
   console.log("Morgan is enabled...");
 }
-
-// we set env for our application using this command:
-// set NODE_ENV=production - only works in cmd not in powershell
 
 app.use(logger);
 
@@ -109,3 +113,14 @@ app.delete("/api/courses/:id", (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
+
+// one topic that goes with hand with hand with environment is the topic to storing application's configuration and overwrite these setting in each environment. in each environment you gonna use different database or mail server.
+
+// there is various node packages for managing configuration. the most popular one is RC.
+// RC docs: https://www.npmjs.com/package/rc
+// another node package for this propose is npm config:
+// npm config docs: https://www.npmjs.com/package/config
+
+// you should not store application secrets in config files like API Key,... because it is expose in source control and every one who has access to that can see the secrets. so the way we dealing with these secrets is that to storing in environment variables and read them using config module.
+
+// define a json file in config for mapping environment variable with config for example we map mail.password to app_password environment variable and then manually define this environment variable in each environment.
