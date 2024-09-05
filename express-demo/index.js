@@ -1,3 +1,6 @@
+const startupDebugger = require("debug")("app:startup"); // the require('debug') return a method than we can specify namespace as argument for that like app:startup and we got a debugging function from that.
+const dbDebugger = require("debug")("app:db");
+
 const config = require("config");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -14,23 +17,27 @@ app.use(helmet());
 // Configuration
 console.log("Application Name: " + config.get("name"));
 console.log("Mail Server: " + config.get("mail.host"));
-
-// for testing, in cmd run these commands:
-// set NODE_DEV=development
-// nodemon index.js
-
-// if you want to change the NODE_DEV, you should close and open cmd and then run set command!
-
-console.log("Mail Password: " + config.get("mail.password"));
-
-// for testing, create a file with exact spelling, custom-environment-variables.json for mapping config to environment variables and then set environment variable and run application:
-// set app_password=1234
-// nodemon index.js
+//console.log("Mail Password: " + config.get("mail.password"));
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
-  console.log("Morgan is enabled...");
+  // A better way to log messages for debugging purposes is to use debug node package.
+  // debug docs: https://www.npmjs.com/package/debug
+  // console.log("Morgan enabled...");
+  startupDebugger("Morgan enabled...");
 }
+
+// Db work...
+dbDebugger("Connected to the database...");
+
+// we can also using the env variables, set which debugger message we want to see:
+// e.g.
+// set DEBUG = app:startup or
+// set DEBUG = app:db or
+// set DEBUG = app:db,app:startup
+// set DEBUG=8 (means all)
+
+// debug package color code the debugger messages.
 
 app.use(logger);
 
@@ -113,14 +120,3 @@ app.delete("/api/courses/:id", (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
-
-// one topic that goes with hand with hand with environment is the topic to storing application's configuration and overwrite these setting in each environment. in each environment you gonna use different database or mail server.
-
-// there is various node packages for managing configuration. the most popular one is RC.
-// RC docs: https://www.npmjs.com/package/rc
-// another node package for this propose is npm config:
-// npm config docs: https://www.npmjs.com/package/config
-
-// you should not store application secrets in config files like API Key,... because it is expose in source control and every one who has access to that can see the secrets. so the way we dealing with these secrets is that to storing in environment variables and read them using config module.
-
-// define a json file in config for mapping environment variable with config for example we map mail.password to app_password environment variable and then manually define this environment variable in each environment.
