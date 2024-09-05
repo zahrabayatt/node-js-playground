@@ -7,21 +7,9 @@ const logger = require("./logger");
 const express = require("express");
 const app = express();
 
-// in the all endpoints that we implemented so far, we return a json object as response. sometimes however you need to return a html markup to the client and that's where we use templating engin.
+// Database integration in Express.js docs: https://expressjs.com/en/guide/database-integration.html
 
-// there are various templating engin that available for express application like:
-// Pug
-// Mustache
-// EJS
-
-// each templating engin has different syntax for generating dynamic html and returning it to the client.
-
-// in this demo we use Pug: https://www.npmjs.com/package/pug
-
-// we need to set view engin for our application:
-app.set("view engine", "pug"); // with this express internally load the pug module.
-
-// optional setting to overwrite the path to the template, the default value is './views'
+app.set("view engine", "pug");
 app.set("views", "./views");
 
 app.use(express.json());
@@ -46,8 +34,7 @@ const courses = [
 ];
 
 app.get("/", (req, res) => {
-  // res.send("Hello World");
-  res.render("index", { title: "My Express App", message: "Hello" }); // the first argument is the name of view which is index.pug and the second argument is the parameters that we define in our view.
+  res.render("index", { title: "My Express App", message: "Hello" });
 });
 
 app.get("/api/courses", (req, res) => {
