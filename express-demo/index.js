@@ -1,6 +1,4 @@
-const startupDebugger = require("debug")("app:startup"); // the require('debug') return a method than we can specify namespace as argument for that like app:startup and we got a debugging function from that.
-const dbDebugger = require("debug")("app:db");
-
+const debug = require("debug")("app:startup");
 const config = require("config");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -9,35 +7,35 @@ const logger = require("./logger");
 const express = require("express");
 const app = express();
 
+// in the all endpoints that we implemented so far, we return a json object as response. sometimes however you need to return a html markup to the client and that's where we use templating engin.
+
+// there are various templating engin that available for express application like:
+// Pug
+// Mustache
+// EJS
+
+// each templating engin has different syntax for generating dynamic html and returning it to the client.
+
+// in this demo we use Pug: https://www.npmjs.com/package/pug
+
+// we need to set view engin for our application:
+app.set("view engine", "pug"); // with this express internally load the pug module.
+
+// optional setting to overwrite the path to the template, the default value is './views'
+app.set("views", "./views");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(helmet());
 
-// Configuration
 console.log("Application Name: " + config.get("name"));
 console.log("Mail Server: " + config.get("mail.host"));
-//console.log("Mail Password: " + config.get("mail.password"));
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
-  // A better way to log messages for debugging purposes is to use debug node package.
-  // debug docs: https://www.npmjs.com/package/debug
-  // console.log("Morgan enabled...");
-  startupDebugger("Morgan enabled...");
+  debug("Morgan enabled...");
 }
-
-// Db work...
-dbDebugger("Connected to the database...");
-
-// we can also using the env variables, set which debugger message we want to see:
-// e.g.
-// set DEBUG = app:startup or
-// set DEBUG = app:db or
-// set DEBUG = app:db,app:startup
-// set DEBUG=8 (means all)
-
-// debug package color code the debugger messages.
 
 app.use(logger);
 
@@ -48,7 +46,8 @@ const courses = [
 ];
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  // res.send("Hello World");
+  res.render("index", { title: "My Express App", message: "Hello" }); // the first argument is the name of view which is index.pug and the second argument is the parameters that we define in our view.
 });
 
 app.get("/api/courses", (req, res) => {
