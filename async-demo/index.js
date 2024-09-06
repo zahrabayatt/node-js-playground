@@ -1,17 +1,26 @@
 console.log("Before");
-const user = getUser(1);
-console.log(user); // undefined - when we calling getUser(1), the function callback that we sent to setTimeout doesn't call at the time we calling getUser(1), so the value that this callback function returns it is not available! It will call 2 seconds after in the future.
+// getUser(1, (user) => {
+//   console.log("User", user);
+// });
+getUser(1, (user) => {
+  console.log("User", user);
+  getRepositories(user.githubUsername, (repos) => {
+    console.log("Repos", repos);
+  });
+});
 console.log("After");
 
-function getUser(id) {
+// the callback is a function to call when the result of asynchronous operation is ready!
+function getUser(id, callback) {
   setTimeout(() => {
     console.log("Reading a use from a database...");
-    return { id: id, githubUsername: "zahrabayatt" };
+    callback({ id: id, githubUsername: "zahrabayatt" });
   }, 2000);
 }
 
-// How to access to the user that getUser function returns?
-// There is three patterns for dealing with asynchronous cod:
-// Callbacks
-// Promises
-// Async/await - which is a syntax sugar over the promises
+function getRepositories(username, callback) {
+  setTimeout(() => {
+    console.log(`Getting ${username}'s repositories...`);
+    callback(["repo1", "repo2", "repo3"]);
+  }, 2000);
+}
