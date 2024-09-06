@@ -1,15 +1,17 @@
-// Synchronous programming:
 console.log("Before");
+const user = getUser(1);
+console.log(user); // undefined - when we calling getUser(1), the function callback that we sent to setTimeout doesn't call at the time we calling getUser(1), so the value that this callback function returns it is not available! It will call 2 seconds after in the future.
 console.log("After");
 
-// Asynchronous programming:
-// First the Before and After print in terminal and then after 2 seconds the callback function in Timeout will executed!
+function getUser(id) {
+  setTimeout(() => {
+    console.log("Reading a use from a database...");
+    return { id: id, githubUsername: "zahrabayatt" };
+  }, 2000);
+}
 
-console.log("Before");
-// This function is a example of asynchronous or non-blocking function. when we call this function, it will schedule to perform this task in the future. It doesn't block and wait it just create a schedule in feature.
-setTimeout(() => {
-  console.log("Reading a use from a database...");
-}, 2000);
-console.log("After");
-
-// Asynchronous doesn't mean concurrent or multiple threads. In this application we have a single thread!, so this thread first log two messages and then when it will free it will perform schedule task witch means wait two seconds and then log a message.
+// How to access to the user that getUser function returns?
+// There is three patterns for dealing with asynchronous cod:
+// Callbacks
+// Promises
+// Async/await - which is a syntax sugar over the promises
