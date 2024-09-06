@@ -36,13 +36,11 @@ function getCommits(repo, callback) {
 
 console.log("Before");
 
-getUser(1).then((user) => {
-  getRepositories(user.githubUsername).then((repos) => {
-    getCommits(repos[0]).then((commits) => {
-      console.log(commits);
-    });
-  });
-});
+getUser(1)
+  .then((user) => getRepositories(user.githubUsername))
+  .then((repos) => getCommits(repos[0]))
+  .then((commits) => console.log(commits))
+  .catch((err) => console.log("Error", err.message));
 
 console.log("After");
 
