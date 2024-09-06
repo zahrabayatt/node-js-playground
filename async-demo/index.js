@@ -1,16 +1,13 @@
 console.log("Before");
-// getUser(1, (user) => {
-//   console.log("User", user);
-// });
+
+// with callbacks, our code will be end up like this if all functions are asynchronous, the syntax is nested and refers to this as callback hell:
 getUser(1, (user) => {
-  console.log("User", user);
   getRepositories(user.githubUsername, (repos) => {
-    console.log("Repos", repos);
+    getCommies(repo, (commits) => {});
   });
 });
 console.log("After");
 
-// the callback is a function to call when the result of asynchronous operation is ready!
 function getUser(id, callback) {
   setTimeout(() => {
     console.log("Reading a use from a database...");
