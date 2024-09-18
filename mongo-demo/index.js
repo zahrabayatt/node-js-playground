@@ -10,6 +10,7 @@ const courseSchema = new mongoose.Schema({
   author: String,
   tags: [String],
   date: { type: Date, default: Date.now },
+  isPublished: { type: Boolean, default: true },
 });
 
 const Course = mongoose.model("Course", courseSchema);
@@ -19,22 +20,32 @@ async function createCourse() {
     name: "Angular Course",
     author: "Zahra Bayat",
     tags: ["angular", "frontend"],
-    isPublished: true,
   });
 
-  // save is a async function
-  // result is a course that is saved in database and mongodb assign a uniq id to it
   const result = await course.save();
   console.log(result);
-  // log:
-  //   {
-  //   name: 'Angular Course',
-  //   author: 'Zahra Bayat',
-  //   tags: [ 'angular', 'frontend' ],
-  //   _id: new ObjectId('66eb4c60ffeb176b160e4114'),
-  //   date: 2024-09-18T21:55:44.345Z,
-  //   __v: 0
-  // }
 }
 
-createCourse();
+async function getCourses() {
+  // get all courses
+  // const courses = await Course.find();
+
+  // get courses match the filter we passed as argument
+
+  //   const courses = await Course.find({
+  //     author: "Zahra Bayat",
+  //     isPublished: true,
+  //   });
+
+  const courses = await Course.find({
+    author: "Zahra Bayat",
+    isPublished: true,
+  }) // find return a document query that have these useful functions:
+    .limit(10) // add limit number of result
+    .sort({ name: 1 }) // you can sort base on multiple properties and 1 indicated acceding order and -1 indicated descending order
+    .select({ name: 1, tags: 1 }); // we can select properties that we want to be return
+
+  console.log(courses);
+}
+
+getCourses();
