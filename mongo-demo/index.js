@@ -27,23 +27,26 @@ async function createCourse() {
 }
 
 async function getCourses() {
-  // get all courses
-  // const courses = await Course.find();
+  // Comprising Operators in MongoDB which is also availabe in Mongoose:
+  // en (Equal)
+  // ne (not equal)
+  // gt (greater than)
+  // gte (greater than or equal to)
+  // lt (less than)
+  // lte (less than or equal to)
+  // in
+  // nin (not in)
 
-  // get courses match the filter we passed as argument
+  // imagemin the course has price property:
 
-  //   const courses = await Course.find({
-  //     author: "Zahra Bayat",
-  //     isPublished: true,
-  //   });
+  // we got all courses with price 10:
+  //   const courses = await Course.find({ price: 10 });
 
-  const courses = await Course.find({
-    author: "Zahra Bayat",
-    isPublished: true,
-  }) // find return a document query that have these useful functions:
-    .limit(10) // add limit number of result
-    .sort({ name: 1 }) // you can sort base on multiple properties and 1 indicated acceding order and -1 indicated descending order
-    .select({ name: 1, tags: 1 }); // we can select properties that we want to be return
+  // we got all courses with price greater than 10
+  // we pass a object as value for price property and this object is a key value pairs where comparison operators is key and we specify them with $ prefix:
+  // const courses = await Course.find({ price: { $gt: 10 } });
+  // const courses = await Course.find({ price: { $gt: 10, $lte: 20 } });
+  const courses = await Course.find({ price: { $in: [10, 15, 20] } }); // get all courses with price either are 10 or 15 or 20 dollars
 
   console.log(courses);
 }
