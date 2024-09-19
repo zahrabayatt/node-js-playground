@@ -6,24 +6,44 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
 const courseSchema = new mongoose.Schema({
-  name: String,
+  // these validating we wrote here, it's only meaningful in mongoose and we don't have validation level in mongodb and mongodb unlike no-sql or sql databases don't care about validation.
+
+  // we use joy node package in our restful apis, we use that as first attack to make sure the data that client is sending us is valid data but we still need mongoose validation to make sure the data we're sending to database is valid data.
+
+  name: { type: String, required: true }, // Add Validation
   author: String,
   tags: [String],
   date: { type: Date, default: Date.now },
-  isPublished: { type: Boolean, default: true },
+  isPublished: Boolean,
+  price: Number,
 });
 
 const Course = mongoose.model("Course", courseSchema);
 
 async function createCourse() {
   const course = new Course({
-    name: "Angular Course",
+    // name: "Angular Course",
     author: "Zahra Bayat",
     tags: ["angular", "frontend"],
+    isPublished: true,
+    price: 15,
   });
 
-  const result = await course.save();
-  console.log(result);
+  try {
+    await course.validate(); // it validate and if fails it returns a exception
+
+    // another syntax to validate but it makes code messy:
+    // course.validate(err => {
+    //   if (err) {
+
+    //   }
+    // })
+
+    const result = await course.save();
+    console.log(result);
+  } catch (ex) {
+    console.log(ex);
+  }
 }
 
 async function getCourses() {
@@ -56,18 +76,9 @@ async function updateCourse(id) {
 }
 
 async function removeCourse(id) {
-  // Course.deleteOne({ isPublished: true})
-  const result = await Course.deleteOne({ _id: id });
-
-  // for deleting multiple document :
-  // await Course.deleteMany({ isPublished: true });
-
-  // to get deleted document:
   const course = await Course.findByIdAndDelete(id);
-  // if not exist it returns null:
-  console.log(course);
 
-  console.log(result);
+  console.log(course);
 }
 
-removeCourse("66eb4fc5ea66d9db73455e85");
+createCourse();
