@@ -27,11 +27,21 @@ async function createCourse() {
 }
 
 async function getCourses() {
-  // get number of documents;
+  // we use skip method to implement pagination:
+
+  // in real world application, instead of hardcoded these numbers, we pass these values as query string parameters to our restful apis:
+  // /api/courses?pageNumber=2&pageSize=10
+
+  const pageNumber = 1; // it's page number not page index!
+  const pageSize = 10;
+
+  // get documents in given page number:
   const courses = await Course.find({
     author: "Zahra Bayat",
     isPublished: true,
-  }).countDocuments();
+  })
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize);
 
   console.log(courses);
 }
