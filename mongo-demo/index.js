@@ -41,27 +41,6 @@ async function getCourses() {
 }
 
 async function updateCourse(id) {
-  // Approach2: Update first
-  // Update directly
-  // Optionally: get the updated document
-
-  // MongoDB update operates: https://www.mongodb.com/docs/manual/reference/operator/update/
-
-  // const result = await Course.updateOne({_id: id});
-  // or
-  // const result = await Course.updateMany({isPublished: false});
-  const result = await Course.updateOne(
-    { _id: id },
-    {
-      $set: {
-        author: "Zahra Bayat",
-        isPublished: false,
-      },
-    }
-  );
-
-  // if you want to get a document that updated use findByIdAndUpdate method:
-
   const course = await Course.findByIdAndUpdate(
     id,
     {
@@ -70,12 +49,25 @@ async function updateCourse(id) {
         isPublished: true,
       },
     },
-    { new: true } // if we don't set this argument, we got the course before updating and not updated course!
+    { new: true }
   );
 
+  console.log(course);
+}
+
+async function removeCourse(id) {
+  // Course.deleteOne({ isPublished: true})
+  const result = await Course.deleteOne({ _id: id });
+
+  // for deleting multiple document :
+  // await Course.deleteMany({ isPublished: true });
+
+  // to get deleted document:
+  const course = await Course.findByIdAndDelete(id);
+  // if not exist it returns null:
   console.log(course);
 
   console.log(result);
 }
 
-updateCourse("66eb4fc5ea66d9db73455e85");
+removeCourse("66eb4fc5ea66d9db73455e85");
