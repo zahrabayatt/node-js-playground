@@ -27,26 +27,21 @@ async function createCourse() {
 }
 
 async function getCourses() {
-  // Comprising Operators in MongoDB which is also availabe in Mongoose:
-  // en (Equal)
-  // ne (not equal)
-  // gt (greater than)
-  // gte (greater than or equal to)
-  // lt (less than)
-  // lte (less than or equal to)
-  // in
-  // nin (not in)
+  // logical operators:
+  // or
+  // and
 
-  // imagemin the course has price property:
+  // const courses = await Course.find({
+  //   author: "Zahra Bayat",
+  //   isPublished: true,
+  // });
 
-  // we got all courses with price 10:
-  //   const courses = await Course.find({ price: 10 });
-
-  // we got all courses with price greater than 10
-  // we pass a object as value for price property and this object is a key value pairs where comparison operators is key and we specify them with $ prefix:
-  // const courses = await Course.find({ price: { $gt: 10 } });
-  // const courses = await Course.find({ price: { $gt: 10, $lte: 20 } });
-  const courses = await Course.find({ price: { $in: [10, 15, 20] } }); // get all courses with price either are 10 or 15 or 20 dollars
+  // if you want courses that published by "Zahra Bayat" or is published:
+  // we use or method and pass a array of filters, each object in array is a filter.
+  // we also have and method and pass a array of filters.
+  const courses = await Course.find()
+    .or([{ isPublished: true }, { author: "Zahra Bayat" }])
+    .and([{ isPublished: true }, { author: "Zahra Bayat" }]);
 
   console.log(courses);
 }
