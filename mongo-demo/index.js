@@ -6,16 +6,36 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
 const courseSchema = new mongoose.Schema({
-  // these validating we wrote here, it's only meaningful in mongoose and we don't have validation level in mongodb and mongodb unlike no-sql or sql databases don't care about validation.
-
-  // we use joy node package in our restful apis, we use that as first attack to make sure the data that client is sending us is valid data but we still need mongoose validation to make sure the data we're sending to database is valid data.
-
-  name: { type: String, required: true }, // Add Validation
+  // depending of type of these property we have additional validator for example for string we have maxLength and minLength and match:
+  name: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxLength: 255,
+    // match: /pattern/
+  },
+  category: {
+    type: String,
+    required: true,
+    enum: ["web", "mobile", "network"], // enum validator
+  },
   author: String,
   tags: [String],
   date: { type: Date, default: Date.now },
   isPublished: Boolean,
-  price: Number,
+  price: {
+    type: Number,
+    // The 'required' property can be a boolean or a function returning a boolean
+
+    //In Mongoose, when you use a regular function (not an arrow function) inside the schema methods or properties, this refers to the current document. However, if you use an arrow function, this does not bind to the current document; instead, it inherits the value of this from the surrounding context (which is likely not the document).
+    required: function () {
+      return this.isPublished;
+    },
+
+    // for numbers we have min and max validators, we also have these validators for dates:
+    min: 10,
+    max: 200,
+  },
 });
 
 const Course = mongoose.model("Course", courseSchema);
@@ -26,19 +46,11 @@ async function createCourse() {
     author: "Zahra Bayat",
     tags: ["angular", "frontend"],
     isPublished: true,
-    price: 15,
+    category: "-",
+    // price: 15,
   });
 
   try {
-    await course.validate(); // it validate and if fails it returns a exception
-
-    // another syntax to validate but it makes code messy:
-    // course.validate(err => {
-    //   if (err) {
-
-    //   }
-    // })
-
     const result = await course.save();
     console.log(result);
   } catch (ex) {
