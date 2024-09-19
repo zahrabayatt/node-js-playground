@@ -41,32 +41,41 @@ async function getCourses() {
 }
 
 async function updateCourse(id) {
-  // Theres two ways to update a document in MongoDB:
-  // Approach1: Query first
-  // findById()
-  // Modify its properties
-  // save()
-
-  const course = await Course.findById(id);
-  if (!course) {
-    return;
-  }
-
-  // course.isPublished = true;
-  // course.author = "Another Author";
-  // Or
-
-  course.set({
-    isPublished: true,
-    author: "Another Author",
-  });
-
-  const result = await course.save();
-  console.log(result);
-
   // Approach2: Update first
   // Update directly
   // Optionally: get the updated document
+
+  // MongoDB update operates: https://www.mongodb.com/docs/manual/reference/operator/update/
+
+  // const result = await Course.updateOne({_id: id});
+  // or
+  // const result = await Course.updateMany({isPublished: false});
+  const result = await Course.updateOne(
+    { _id: id },
+    {
+      $set: {
+        author: "Zahra Bayat",
+        isPublished: false,
+      },
+    }
+  );
+
+  // if you want to get a document that updated use findByIdAndUpdate method:
+
+  const course = await Course.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        author: "Jack",
+        isPublished: true,
+      },
+    },
+    { new: true } // if we don't set this argument, we got the course before updating and not updated course!
+  );
+
+  console.log(course);
+
+  console.log(result);
 }
 
 updateCourse("66eb4fc5ea66d9db73455e85");
