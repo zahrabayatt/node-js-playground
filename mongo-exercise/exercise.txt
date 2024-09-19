@@ -10,8 +10,3 @@ you need to download the MongoDB Command Line Database Tools Download: https://w
 and Then follow this tutorial on how to install it: https://www.mongodb.com/docs/database-tools/installation/installation-windows/
 
 
-# Exercise:
-Get all the published backend courses, 
-sort them by their name,
-pick only their name and author,
-and display them.

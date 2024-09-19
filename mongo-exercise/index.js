@@ -1,6 +1,6 @@
 // Exercise:
-// Get all the published backend courses,
-// sort them by their name,
+// Get all the published frontend and backend courses,
+// sort them by their price in a descending order,
 // pick only their name and author,
 // and display them.
 
@@ -22,20 +22,17 @@ const courseSchema = new mongoose.Schema({
 
 const Course = mongoose.model("Course", courseSchema);
 
-// Query Arrays docs: https://www.mongodb.com/docs/manual/tutorial/query-arrays/
-
-// Select API: https://mongoosejs.com/docs/api/query.html#Query.prototype.select()
+// Use the $in Operator to Match Values in an Array: https://www.mongodb.com/docs/manual/reference/operator/query/in/#use-the--in-operator-to-match-values-in-an-array
 
 async function getCourses() {
   return await Course.find({
     isPublished: true,
-    tags: /backend/i,
+    tags: { $in: [/backend/i, /frontend/i] },
   })
-    .sort({ name: 1 }) // acc: .sort('name') dec: .sort('-name')
-    .select({ name: 1, author: 1 }); // or .select('name author')
+    //.or([{ tags: /backend/i }, { tags: /frontend/i }])
+    .sort({ price: -1 })
+    .select({ name: 1, author: 1 });
 }
-
-// when we decorate a function with async, JS engin automatically wrap the result of function in a promise.
 
 async function run() {
   const courses = await getCourses();
