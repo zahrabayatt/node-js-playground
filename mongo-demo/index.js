@@ -27,33 +27,11 @@ async function createCourse() {
 }
 
 async function getCourses() {
-  // if you want to get all Courses that have a name like
-  // Zahra
-  // Bayat
-  // Zahra Bayat
-  // you can use regular expression.
-
-  // const courses = await Course.find({
-  //   author: "Zahra Bayat",
-  //   isPublished: true,
-  // });
-
-  // Start with Zahra
-  // /pattern/ is a syntax that indicate it's a regular expression.
-  // const courses = await Course.find({ author: /^Zahra/ });
-
-  // Ends with Bayat
-  // const courses = await Course.find({ author: /Zahra$/ });
-
-  // the two pattern so far is case sensitive if you want to be not case sensitive you add i at end of pattern
-  // const courses = await Course.find({ author: /Zahra$/i });
-
-  // Contains Zahra
-  const courses = await Course.find({ author: /.*Zahra.*/ });
-
-  // JS regular expression docs:
-  // https://www.w3schools.com/js/js_regexp.asp
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions
+  // get number of documents;
+  const courses = await Course.find({
+    author: "Zahra Bayat",
+    isPublished: true,
+  }).countDocuments();
 
   console.log(courses);
 }
