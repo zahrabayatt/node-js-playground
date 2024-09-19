@@ -27,15 +27,9 @@ async function createCourse() {
 }
 
 async function getCourses() {
-  // we use skip method to implement pagination:
-
-  // in real world application, instead of hardcoded these numbers, we pass these values as query string parameters to our restful apis:
-  // /api/courses?pageNumber=2&pageSize=10
-
-  const pageNumber = 1; // it's page number not page index!
+  const pageNumber = 1;
   const pageSize = 10;
 
-  // get documents in given page number:
   const courses = await Course.find({
     author: "Zahra Bayat",
     isPublished: true,
@@ -46,4 +40,33 @@ async function getCourses() {
   console.log(courses);
 }
 
-getCourses();
+async function updateCourse(id) {
+  // Theres two ways to update a document in MongoDB:
+  // Approach1: Query first
+  // findById()
+  // Modify its properties
+  // save()
+
+  const course = await Course.findById(id);
+  if (!course) {
+    return;
+  }
+
+  // course.isPublished = true;
+  // course.author = "Another Author";
+  // Or
+
+  course.set({
+    isPublished: true,
+    author: "Another Author",
+  });
+
+  const result = await course.save();
+  console.log(result);
+
+  // Approach2: Update first
+  // Update directly
+  // Optionally: get the updated document
+}
+
+updateCourse("66eb4fc5ea66d9db73455e85");
