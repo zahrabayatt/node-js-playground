@@ -27,21 +27,33 @@ async function createCourse() {
 }
 
 async function getCourses() {
-  // logical operators:
-  // or
-  // and
+  // if you want to get all Courses that have a name like
+  // Zahra
+  // Bayat
+  // Zahra Bayat
+  // you can use regular expression.
 
   // const courses = await Course.find({
   //   author: "Zahra Bayat",
   //   isPublished: true,
   // });
 
-  // if you want courses that published by "Zahra Bayat" or is published:
-  // we use or method and pass a array of filters, each object in array is a filter.
-  // we also have and method and pass a array of filters.
-  const courses = await Course.find()
-    .or([{ isPublished: true }, { author: "Zahra Bayat" }])
-    .and([{ isPublished: true }, { author: "Zahra Bayat" }]);
+  // Start with Zahra
+  // /pattern/ is a syntax that indicate it's a regular expression.
+  // const courses = await Course.find({ author: /^Zahra/ });
+
+  // Ends with Bayat
+  // const courses = await Course.find({ author: /Zahra$/ });
+
+  // the two pattern so far is case sensitive if you want to be not case sensitive you add i at end of pattern
+  // const courses = await Course.find({ author: /Zahra$/i });
+
+  // Contains Zahra
+  const courses = await Course.find({ author: /.*Zahra.*/ });
+
+  // JS regular expression docs:
+  // https://www.w3schools.com/js/js_regexp.asp
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions
 
   console.log(courses);
 }
