@@ -5,6 +5,12 @@ mongoose
   .then(() => console.log("Connected to MongoDB..."))
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
+// when we defining a schema, we can set the type of property directly or use a schema type object.
+
+// the schema type object has few properties like: type, required, ...
+
+// a few more properties that available in this schema type object:
+
 const courseSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,10 +18,14 @@ const courseSchema = new mongoose.Schema({
     minLength: 5,
     maxLength: 255,
   },
+  // for string type we have additional properties:
   category: {
     type: String,
     required: true,
     enum: ["web", "mobile", "network"],
+    // uppercase: true,
+    lowercase: true, // store category as lowercase even we set it to uppercase
+    trim: true,
   },
   author: String,
   tags: {
@@ -40,6 +50,10 @@ const courseSchema = new mongoose.Schema({
     },
     min: 10,
     max: 200,
+    // custom getter - round value when we getting data
+    get: (v) => Math.round(v),
+    // custom setter - round value when we adding data
+    set: (v) => Math.round(v),
   },
 });
 
@@ -49,10 +63,10 @@ async function createCourse() {
   const course = new Course({
     name: "Angular Course",
     author: "Zahra Bayat",
-    //tags: [],
+    tags: ["frontend"],
     isPublished: true,
-    category: "-",
-    price: 15,
+    category: "Web",
+    price: 15.098,
   });
 
   try {
@@ -60,7 +74,6 @@ async function createCourse() {
     console.log(result);
   } catch (ex) {
     for (field in ex.errors) {
-      // console.log(ex.errors[field]);
       console.log(ex.errors[field].message);
     }
   }
