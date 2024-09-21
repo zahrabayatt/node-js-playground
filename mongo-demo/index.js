@@ -115,3 +115,57 @@ async function removeCourse(id) {
 }
 
 createCourse();
+
+// in the real world application entities and concept that we're working with them have kind of association. for example we might have a Course document that each Course has a Author which is a document with properties like name, website, image...
+
+// How to work with related object in MongoDB?
+// we have two approach:
+
+// Trade off between query performance vs consistence
+
+// 1- Using References (Normalization) -> consistency (to edit a document we only edit in one place and other palace has reference to that)
+// we should separate collections:
+let author = {
+  id: 1,
+  name: "Zahra",
+};
+
+let course = {
+  author: "id", // id of author document  in author collection
+};
+
+// !!! in relational databases we have this concept of relationship which enforces data integrity, but in MongoDB or in no sql databases in general, we don't have really relationship. even though in the above example we add a reference, there is no association between these documents in database and we can set the author id in course document to invalid id and mongodb doesn't care about it.
+
+// if each course could have a multiple authors:
+
+let anotherAuthor = {
+  id: 1,
+  name: "Zahra",
+};
+
+let anotherCourse = {
+  authors: ["id1", "id2"],
+};
+
+// 2- Using Embedded Documents (Demoralization) -> performance (single query to get all essential data)
+// instead of separate documents, we can embedded documents in each other:
+
+let course3 = {
+  author: {
+    name: "Mosh",
+  },
+};
+
+// 3- Hybrid
+// we only embedded the properties of document that we need
+let author4 = {
+  name: "Zahra",
+  // 50 other properties
+};
+
+let course4 = {
+  author: {
+    id: "ref",
+    name: "Zahra",
+  },
+};
