@@ -6,7 +6,6 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
 const authorSchema = new mongoose.Schema({
-  // we can apply validation to author properties.
   name: String,
   bio: String,
   website: String,
@@ -18,20 +17,15 @@ const Course = mongoose.model(
   "Course",
   new mongoose.Schema({
     name: String,
-    //author: authorSchema,
-
-    // we can apply validation to author:
-    author: {
-      type: authorSchema,
-      required: true,
-    },
+    // embed array of sub document
+    authors: [authorSchema],
   })
 );
 
-async function createCourse(name, author) {
+async function createCourse(name, authors) {
   const course = new Course({
     name,
-    author,
+    authors,
   });
 
   const result = await course.save();
@@ -44,32 +38,26 @@ async function listCourses() {
   console.log(courses);
 }
 
-// author is a sub document of course document and it is like a normal document and most features are available on normal document, are also available on sub documents for example we can implement validation for them, however these sub documents can not be saved by their own, they can only be saved in context of their parent, for example:
-
-async function updateAuthor(courseId) {
-  // const course = await Course.findById(courseId);
-  // course.author.name = "John";
-  // course.save();
-
-  // instead of finding the course first and then update, we can also update author directly:
-  const course = await Course.updateOne(
-    { _id: courseId },
-    {
-      $set: {
-        // access to nested properties using dot
-        "author.name": "John Smith",
-      },
-
-      // we can also unset the property using unset operator:
-      // $unset: {
-      //   author: "", // this course will not have a author property anymore
-      // },
-    }
-  );
+async function addAuthor(courseId, author) {
+  const course = await Course.findById(courseId);
+  course.authors.push(author);
+  course.save();
 }
 
-//createCourse("Node Course", new Author({ name: "Zahra" }));
+async function removeAuthor(courseId, authorId) {
+  const course = await Course.findById(courseId);
+  // with id method in documentArray, we can look up child object by id in other words, it searches array items for the first document with a matching _id.:
+  const author = course.authors.id(authorId);
+  author.deleteOne();
+  course.save();
+}
 
-updateAuthor("66efead411a285260c8c1b5c");
+// createCourse("Node Course", [
+//   new Author({ name: "Zahra" }),
+//   new Author({ name: "John" }),
+//   new Author({ name: "Heather" }),
+// ]);
 
-// listCourses();
+// addAuthor("66eff162c4e8548930fe83fb", new Author({ name: "Amy" }));
+
+removeAuthor("66eff162c4e8548930fe83fb", "66eff2db55d5a1657e270416");
