@@ -48,13 +48,24 @@ async function createCourse(name, author) {
 }
 
 async function listCourses() {
-  const courses = await Course.find().select("name");
+  const courses = await Course.find()
+    // we use populate method to load author properties. we pass the author which is the property name in course schema.
+    //.populate("author")
+    // we can specify the properties that we want to include or exclude:
+    //.populate("author", "name")
+    // exclude _id:
+    .populate("author", "name -_id")
+    // we can populate multiple properties, for example imagine each course has a category and category references to category document:
+    .populate("category", "name")
+    .select("name author");
 
   console.log(courses);
 }
 
 // createAuthor("Zahra", "My bio", "My Website");
 
-createCourse("Node Course", "66efe652c478de6146a7e885");
+// createCourse("Node Course", "66efe652c478de6146a7e885");
 
-// listCourses();
+listCourses();
+
+// if we create a course document with invalid author id, mongodb doesn't care about it and when we load the course document, it return the author null.
