@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Fawn = require("fawn"); // it's a class
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/playground")
@@ -14,12 +13,24 @@ mongoose
 // we also have a technic that called Two Phase Commit:
 // https://www.codementor.io/@christkv/mongodb-transactions-vs-two-phase-commit-u6blq7465
 
-// there is a library that gives us the concept of transaction but internally implement this transaction using the two phase commit technic:
-// fawn docs: https://www.npmjs.com/package/fawn
+// to use transaction from mongodb you should do these things:
+// convert your mongodb from standalone self-managed to a replica set :
+// 1- add this lines in your mongod.cfg file in C:\Program Files\MongoDB\Server\7.0\bin :
+// replication:
+//  replSetName: rs0
 
-// Fawn.init(mongoose); didn't work
-// base on this explanation: https://www.npmjs.com/package/fawn#fawn_init I try this and it works:
-Fawn.init("mongodb://127.0.0.1:27017/playground");
+// 2- restart the mongodb server using these command:
+// net stop MongoDB
+// net start MongoDB
+// or you can click ctrl + R and open services.msc and then find MongoDB Server and then right click and hit stop and start option.
+
+// open mongosh terminal and run these commands:
+// rs.initiate() // You only have to initiate the replica set once.
+// rs.conf() // To view the replica set configuration
+// rs.status() // To check the status of the replica set
+// rs.add()
+
+// if you want to create a new connection string in MongoDB Compass, remember to check the direct connection option in setting.
 
 const movieSchema = new mongoose.Schema({
   title: {
@@ -84,28 +95,70 @@ async function createRental(movieId) {
       title: movie.title,
     },
   });
-  // pass the actual name of the collection (The plural not singular), which is case sensitive
+
+  const session = await mongoose.startSession();
   try {
-    new Fawn.Task()
-      .save("rentals", rental)
-      .update(
-        "movies",
-        { _id: movie._id },
-        {
-          $inc: { numberInStock: -1 },
-        }
-      )
-      .run();
-    // you can remove document
-    //.remove()
+    await session.withTransaction(async () => {
+      const resultRental = await rental.save({ session: session });
+      // throw new Error("Could not create the rental"); // for testing purpose
+      await movie.updateOne(
+        { $inc: { numberInStock: -1 } },
+        { session: session }
+      );
+      console.log(resultRental);
+    });
+    console.log("Rental is Created successfully.");
   } catch (ex) {
     console.error("something failed.", ex);
+  } finally {
+    await session.endSession();
   }
-
-  console.log(movie, rental);
 }
 
 // createMovie("Terminator", 8);
 
-createRental("66f1699b2ab4fad3b881b22e"); // didn't work, the package is outdated and I got this error:
-// Unhandled rejection MongoError: Unsupported OP_QUERY command: insert. The client driver may require an upgrade.
+createRental("66f1699b2ab4fad3b881b22e");
+
+// How to use Transaction in MongoDB?
+
+// The withTransaction method is considered the more modern and simplified approach to handling transactions in Mongoose. It abstracts away some of the boilerplate code, automatically managing the starting, committing, and aborting of transactions.
+
+// If you don't use withTransaction, you'd typically manage transactions manually by:
+
+// Starting the session.
+// Starting the transaction.
+// Performing operations.
+// Committing or aborting the transaction based on success or failure.
+// Ending the session.
+// While both methods are valid, withTransaction is preferred for its clarity and ease of use. Here's a quick comparison:
+
+// Using withTransaction (modern syntax):
+// javascript
+
+// const session = await mongoose.startSession();
+// try {
+//   await session.withTransaction(async () => {
+//     // Your operations here
+//   });
+// } catch (error) {
+//   console.error("Transaction failed:", error);
+// } finally {
+//   await session.endSession();
+// }
+
+// Without withTransaction (manual approach):
+// javascript
+
+// const session = await mongoose.startSession();
+// session.startTransaction();
+// try {
+//   // Your operations here
+//   await session.commitTransaction();
+// } catch (error) {
+//   await session.abortTransaction();
+//   console.error("Transaction failed:", error);
+// } finally {
+//   await session.endSession();
+// }
+
+// In summary, withTransaction is the newer, more streamlined syntax, while the manual approach gives you more control but requires more code.
