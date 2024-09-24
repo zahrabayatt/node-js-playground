@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 const express = require("express");
 const app = express();
 
@@ -115,8 +116,12 @@ app.post("/api/rentals", async (req, res) => {
 });
 
 function validateRental(rental) {
+  //   const schema = Joi.object({
+  //     movieId: Joi.string().required(),
+  //   });
+  // validate object id using joi-objectid package
   const schema = Joi.object({
-    movieId: Joi.string().required(),
+    movieId: Joi.objectId().required(),
   });
 
   return schema.validate(rental);
