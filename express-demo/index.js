@@ -30,3 +30,11 @@ app.use(logger);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
+
+// Authentication: It's a process of identifying if the user is who they claim they are. (log in)
+
+// Authorization: It's determining if user has the right permission to perform the given operation.
+
+// To implement this we need two apis:
+// Register: POST /api/users
+// Login: POST /api/logins
