@@ -1,3 +1,4 @@
+const _ = require("lodash"); // by convention we store the result in the _ (underscore)
 const debug = require("debug")("app:startup");
 const config = require("config");
 const helmet = require("helmet");
@@ -31,10 +32,19 @@ app.use(logger);
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
-// Authentication: It's a process of identifying if the user is who they claim they are. (log in)
+// lodash: A modern JavaScript utility library delivering modularity, performance & extras.
+// docs: https://lodash.com/
 
-// Authorization: It's determining if user has the right permission to perform the given operation.
+const user = {
+  name: "Zahra",
+  email: "zahra.bayat13799@gmail.com",
+  password: "12345678",
+};
 
-// To implement this we need two apis:
-// Register: POST /api/users
-// Login: POST /api/logins
+console.log({
+  name: user.name,
+  email: user.email,
+});
+
+// better way is using the pick function in lodash:
+console.log(_.pick(user, ["name", "email"]));
