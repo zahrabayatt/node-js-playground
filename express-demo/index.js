@@ -1,4 +1,5 @@
-const _ = require("lodash"); // by convention we store the result in the _ (underscore)
+const Joi = require("joi");
+const passwordComplexity = require("joi-password-complexity");
 const debug = require("debug")("app:startup");
 const config = require("config");
 const helmet = require("helmet");
@@ -32,19 +33,29 @@ app.use(logger);
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
-// lodash: A modern JavaScript utility library delivering modularity, performance & extras.
-// docs: https://lodash.com/
-
-const user = {
-  name: "Zahra",
-  email: "zahra.bayat13799@gmail.com",
-  password: "12345678",
+const complexityOptions = {
+  min: 5,
+  max: 1024,
+  lowerCase: 1,
+  upperCase: 1,
+  numeric: 1,
+  symbol: 1,
+  requirementCount: 4,
 };
 
-console.log({
-  name: user.name,
-  email: user.email,
-});
+function validateUser(user) {
+  const schema = Joi.object({
+    name: Joi.string().min(5).max(50).required(),
+    email: Joi.string().min(5).max(255).required().email(),
+    password: passwordComplexity(complexityOptions).required(),
+  });
+  return schema.validate(user);
+}
 
-// better way is using the pick function in lodash:
-console.log(_.pick(user, ["name", "email"]));
+user = {
+  name: "Zahra",
+  email: "Zahra.bayat@gmail.com",
+  password: "123Zv#",
+};
+
+console.log(validateUser(user));
