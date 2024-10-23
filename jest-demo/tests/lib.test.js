@@ -1,8 +1,6 @@
 const lib = require("../lib");
 
-// grouping related test using describe
 describe("absolute", () => {
-  // use it instead of test to make it more readable
   it("should return a positive number if input is positive", () => {
     const result = lib.absolute(1);
     expect(result).toBe(1);
@@ -19,10 +17,13 @@ describe("absolute", () => {
   });
 });
 
-// add this script as test command in package.json:
-//"test": "jest"
-
-// to run test use these command:
-// npm t
-// npm test
-// npm run test
+describe("greet", () => {
+  it("should return the greeting message", () => {
+    const result = lib.greet("Zahra");
+    // Use toMatch instead of toBe because toBe checks for exact equality, making the test fragile if small changes (like punctuation) are introduced in the string.
+    // test not should be too specific or general!
+    expect(result).toMatch(/Zahra/);
+    // or
+    // expect(result).toContain("Zahra");
+  });
+});
