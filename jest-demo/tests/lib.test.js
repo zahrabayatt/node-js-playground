@@ -18,3 +18,11 @@ describe("absolute", () => {
     expect(result).toBe(0);
   });
 });
+
+// add this script as test command in package.json:
+//"test": "jest"
+
+// to run test use these command:
+// npm t
+// npm test
+// npm run test
