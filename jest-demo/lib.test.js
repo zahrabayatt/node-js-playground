@@ -1,4 +1,5 @@
 const lib = require("./lib");
+const db = require("./db");
 
 describe("absolute", () => {
   it("should return a positive number if input is positive", () => {
@@ -40,13 +41,6 @@ describe("getProduct", () => {
 
 describe("registerUser", () => {
   it("should throw if username is falsy", () => {
-    // falsy value in JS:
-    // Null
-    // undefined
-    // NaN
-    // ''
-    // 0
-    // false
     const args = [null, undefined, NaN, "", 0, false];
 
     args.forEach((a) => {
@@ -56,8 +50,6 @@ describe("registerUser", () => {
     });
   });
 
-  // or you can write test like this:
-  //%s in the test name is a placeholder for the current value, making the test output clearer.
   it.each([null, undefined, NaN, "", 0, false])(
     "should throw if username is falsy (%s)",
     (falsyValue) => {
@@ -71,5 +63,19 @@ describe("registerUser", () => {
     const result = lib.registerUser("Zahra");
     expect(result).toMatchObject({ username: "Zahra" });
     expect(result.id).toBeGreaterThan(0);
+  });
+});
+
+describe("applyDiscount", () => {
+  it("should apply 10% discount if customer has more than 10 points", () => {
+    // unit test doesn't have external dependency, so we use a simple mock function
+    db.getCustomerSync = (customerId) => {
+      console.log("Fake reading customer...");
+      return { id: customerId, points: 20 };
+    };
+
+    const order = { customerId: 1, totalPrice: 10 };
+    lib.applyDiscount(order);
+    expect(order.totalPrice).toBe(9);
   });
 });
