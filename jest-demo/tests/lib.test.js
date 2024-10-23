@@ -24,30 +24,25 @@ describe("greet", () => {
   });
 });
 
-// How many tests we need or each unit? the number of tests should be equal to or greater than the number of execution paths, plus additional tests for edge cases and input variations
-
 describe("getCurrencies", () => {
   it("should return supported currencies", () => {
     const result = lib.getCurrencies();
-    // Too general
-    expect(result).toBeDefined();
-    expect(result).not.toBeNull();
-
-    // Too specific
-    expect(result[0]).toBe("USD");
-    expect(result[1]).toBe("AUD");
-    expect(result[2]).toBe("EUR");
-
-    // Too specific
-    expect(result.length).toBe(3);
-
-    // Popular way but it is not ideal way
-    expect(result).toContain("USD");
-    expect(result).toContain("AUD");
-    expect(result).toContain("EUR");
-
-    // Ideal way
     expect(result).toEqual(expect.arrayContaining(["USD", "AUD", "EUR"]));
-    // Expect API: https://jestjs.io/docs/expect
+  });
+});
+
+describe("getProduct", () => {
+  it("should return the product with the given id", () => {
+    const result = lib.getProduct(1);
+    // toBe matcher compare the references
+    //expect(result).toBe({ id: 1, price: 10 });
+
+    // use toEqual to compare the values
+    // expect(result).toEqual({ id: 1, price: 10 });
+
+    // better way is to use toMatchObject because if you add property to object it only check the object has these the property that you except and don't care about of other properties
+    expect(result).toMatchObject({ id: 1, price: 10 });
+    // or you can use toHaveProperty to check if specific property is exist
+    //expect(result).toHaveProperty("id", 1);
   });
 });
