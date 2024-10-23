@@ -1,4 +1,5 @@
 const db = require("./db");
+const mail = require("./mail");
 
 // Testing numbers
 module.exports.absolute = (number) => {
@@ -34,4 +35,10 @@ module.exports.applyDiscount = (order) => {
   if (customer.points > 10) {
     order.totalPrice *= 0.9;
   }
+};
+
+module.exports.notifyCustomer = (order) => {
+  const customer = db.getCustomerSync(order.customerId);
+
+  mail.send(customer.email, "Your order was placed successfully.");
 };

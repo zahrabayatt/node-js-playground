@@ -1,5 +1,6 @@
 const lib = require("./lib");
 const db = require("./db");
+const mail = require("./mail");
 
 describe("absolute", () => {
   it("should return a positive number if input is positive", () => {
@@ -68,7 +69,6 @@ describe("registerUser", () => {
 
 describe("applyDiscount", () => {
   it("should apply 10% discount if customer has more than 10 points", () => {
-    // unit test doesn't have external dependency, so we use a simple mock function
     db.getCustomerSync = (customerId) => {
       console.log("Fake reading customer...");
       return { id: customerId, points: 20 };
@@ -77,5 +77,22 @@ describe("applyDiscount", () => {
     const order = { customerId: 1, totalPrice: 10 };
     lib.applyDiscount(order);
     expect(order.totalPrice).toBe(9);
+  });
+});
+
+describe("notifyCustomer", () => {
+  it("should send an email to the customer", () => {
+    db.notifyCustomer = () => {
+      return { email: "a" };
+    };
+
+    let mailSent = false;
+    mail.send = (email, message) => {
+      mailSent = true;
+    };
+
+    lib.notifyCustomer({ customerId: 1 });
+
+    expect(mailSent).toBe(true);
   });
 });
