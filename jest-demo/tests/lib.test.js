@@ -20,10 +20,34 @@ describe("absolute", () => {
 describe("greet", () => {
   it("should return the greeting message", () => {
     const result = lib.greet("Zahra");
-    // Use toMatch instead of toBe because toBe checks for exact equality, making the test fragile if small changes (like punctuation) are introduced in the string.
-    // test not should be too specific or general!
     expect(result).toMatch(/Zahra/);
-    // or
-    // expect(result).toContain("Zahra");
+  });
+});
+
+// How many tests we need or each unit? the number of tests should be equal to or greater than the number of execution paths, plus additional tests for edge cases and input variations
+
+describe("getCurrencies", () => {
+  it("should return supported currencies", () => {
+    const result = lib.getCurrencies();
+    // Too general
+    expect(result).toBeDefined();
+    expect(result).not.toBeNull();
+
+    // Too specific
+    expect(result[0]).toBe("USD");
+    expect(result[1]).toBe("AUD");
+    expect(result[2]).toBe("EUR");
+
+    // Too specific
+    expect(result.length).toBe(3);
+
+    // Popular way but it is not ideal way
+    expect(result).toContain("USD");
+    expect(result).toContain("AUD");
+    expect(result).toContain("EUR");
+
+    // Ideal way
+    expect(result).toEqual(expect.arrayContaining(["USD", "AUD", "EUR"]));
+    // Expect API: https://jestjs.io/docs/expect
   });
 });
