@@ -34,15 +34,42 @@ describe("getCurrencies", () => {
 describe("getProduct", () => {
   it("should return the product with the given id", () => {
     const result = lib.getProduct(1);
-    // toBe matcher compare the references
-    //expect(result).toBe({ id: 1, price: 10 });
-
-    // use toEqual to compare the values
-    // expect(result).toEqual({ id: 1, price: 10 });
-
-    // better way is to use toMatchObject because if you add property to object it only check the object has these the property that you except and don't care about of other properties
     expect(result).toMatchObject({ id: 1, price: 10 });
-    // or you can use toHaveProperty to check if specific property is exist
-    //expect(result).toHaveProperty("id", 1);
+  });
+});
+
+describe("registerUser", () => {
+  it("should throw if username is falsy", () => {
+    // falsy value in JS:
+    // Null
+    // undefined
+    // NaN
+    // ''
+    // 0
+    // false
+    const args = [null, undefined, NaN, "", 0, false];
+
+    args.forEach((a) => {
+      expect(() => {
+        lib.registerUser(null);
+      }).toThrow();
+    });
+  });
+
+  // or you can write test like this:
+  //%s in the test name is a placeholder for the current value, making the test output clearer.
+  it.each([null, undefined, NaN, "", 0, false])(
+    "should throw if username is falsy (%s)",
+    (falsyValue) => {
+      expect(() => {
+        lib.registerUser(falsyValue);
+      }).toThrow();
+    }
+  );
+
+  it("should return a user object if valid username is passed", () => {
+    const result = lib.registerUser("Zahra");
+    expect(result).toMatchObject({ username: "Zahra" });
+    expect(result.id).toBeGreaterThan(0);
   });
 });
